@@ -1,3 +1,62 @@
 /* 
     General Styles
 */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: #425ab2;
+}
+
+.font-logo {
+  font-family: "Montserrat Alternates", sans-serif;
+}
+
+.bg-blue {
+  background-color: #425ab2;
+}
+button.bg-blue:hover {
+  background-color: #5e74c5;
+  color: white;
+}
+
+.color-blue {
+  color: #425ab2;
+}
+
+.bg-yellow {
+  background-color: #ffc765;
+}
+button.bg-yellow:hover {
+  background-color: #ffd285;
+  color: #546ecd;
+}
+
+.color-yellow {
+  color: #f1bc60;
+}
+
+.bg-sand {
+  background-color: #faf5f2;
+}
+
+.bg-light-blue {
+  background-color: #b1d9e3;
+}
+
+.nav-item .nav-link,
+.nav-item .nav-link.active {
+  color: #425ab2;
+}
+
+.nav-link.active::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 4px;
+  background-color: #f1bc60;
+}
+
+.navbar-brand:hover {
+  color: #f1bc60;
+}

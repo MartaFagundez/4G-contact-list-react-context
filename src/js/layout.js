@@ -12,6 +12,7 @@ import { Footer } from "./component/footer";
 import ContactList from "./views/contact-list";
 import AddContact from "./views/add-contact-form";
 import UpdateContact from "./views/update-contact-form";
+import { NotFound } from "./views/not-found";
 
 //create your first component
 const Layout = () => {
@@ -20,7 +21,7 @@ const Layout = () => {
 	const basename = process.env.BASENAME || "";
 
 	return (
-		<div>
+		<div className="d-flex flex-column min-vh-100 bg-sand">
 			<BrowserRouter basename={basename}>
 				<ScrollToTop>
 					<Navbar />
@@ -31,7 +32,7 @@ const Layout = () => {
 						<Route path="/contacts/new" element={<AddContact />} />
 						<Route path="/contacts/update/:id" element={<UpdateContact />} />
 						<Route path="/single/:theid" element={<Single />} />
-						<Route path="*" element={<h1>Not found!</h1>} />
+						<Route path="*" element={<NotFound />} />
 					</Routes>
 					<Footer />
 				</ScrollToTop>
