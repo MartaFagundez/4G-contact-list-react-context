@@ -44,7 +44,7 @@ export default function ContactList() {
           {
             contacts.length > 0 ? 
               contacts.toReversed().map((contact, index) => {
-                return <ContactCard key={index} contact={{...contact, image: getRandomImage()}} />
+                return <ContactCard key={index} contact={{...contact, image: getRandomImage()}} handleDelete={getContactsFromApi} />
               })
               : 
               <p>No hay contactos en la agenda.</p>
