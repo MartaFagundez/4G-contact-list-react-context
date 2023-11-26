@@ -1,6 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router'
 
 export default function ContactCard({contact}) {
+  const navigate = useNavigate();
+
+
   return (
     <div className="d-flex flex-column flex-md-row align-items-center w-100 bg-white p-4 rounded shadow-sm mb-3">
 
@@ -17,7 +21,7 @@ export default function ContactCard({contact}) {
       </div>
 
       <div className="d-flex justify-self-end ms-auto">
-        <button className="btn color-blue"><i className="fa-solid fa-pen"></i></button>
+        <button className="btn color-blue" onClick={() => navigate(`/contacts/edit/${contact.id}`)} ><i className="fa-solid fa-pen"></i></button>
         <button className="btn color-blue"><i className="fa-solid fa-trash-can"></i></button>
       </div>
 
