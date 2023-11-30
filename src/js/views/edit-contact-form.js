@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router';
+import { fetchContact, updateContactApi } from "../../client-API/contacts-api";
+import { useContact } from '../store/contactsStore';
 
 export default function EditContact() {
   const navigate = useNavigate();
   const params = useParams();
   const id = params.id;
-  console.log("id: ", id);
+
+  const { syncContactList }  = useContact();
 
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
@@ -21,31 +24,7 @@ export default function EditContact() {
 
   function handleSave(e) {
     e.preventDefault();
-    putContactOnApi(id);
-  }
 
-  async function getContactFromApi(id) {
-    try {
-      const response = await fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`);
-
-      if(response.status === 200) {
-        const data = await response.json();
-        setFullName(data.full_name);
-        setAddress(data.address);
-        setPhone(data.phone);
-        setEmail(data.email);
-        setAgendaSlug(data.agenda_slug);
-      }
-      else {
-        alert("An error occurred while trying to obtain contact information.")
-      }
-    } catch (error) {
-      alert("An error occurred while trying to obtain contact information.");
-      console.log(error);
-    }
-  }
-
-  async function putContactOnApi(id) {
     const contact = {
       full_name: fullName,
       email,
@@ -54,26 +33,22 @@ export default function EditContact() {
       phone
     };
     
-    try {
-      const response = await fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(contact)
-      });
-
-      if(response.status === 201) {
-        alert("Contact modified successfully");
+    updateContactApi(id, contact)
+      .then(() => {
+        syncContactList();
         navigate("/contacts");
-      }
-      else {
-        alert("An error occurred while trying to save changes.")
-      }
-    } catch (error) {
-      alert("An error occurred while trying to save changes.");
-      console.log(error);
-    }
+      })
+  }
+
+  function getContactFromApi(id) {
+    fetchContact(id)
+      .then(data => {
+        setFullName(data.full_name);
+        setAddress(data.address);
+        setPhone(data.phone);
+        setEmail(data.email);
+        setAgendaSlug(data.agenda_slug);
+      })
   }
 
 

@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
+import { addContactApi } from "../../client-API/contacts-api";
+import { useContact } from '../store/contactsStore';
 
 export default function AddContact() {
   const navigate = useNavigate();
+  const { syncContactList }  = useContact();
   
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
@@ -12,37 +15,21 @@ export default function AddContact() {
 
   function handleClick(e) {
     e.preventDefault();
-    postNewContactOnApi();
-  }
 
-  async function postNewContactOnApi() {
     const newContact = {
       full_name: fullName,
       email,
       agenda_slug: "martafagundez",
       address,
       phone
-    };
-    
-    try {
-      const response = await fetch("https://playground.4geeks.com/apis/fake/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newContact)
-      });
-
-      if(response.status === 201) {
-        navigate("/contacts");
-      }
-      else {
-        alert("An error occurred while trying to create the contact.")
-      }
-    } catch (error) {
-      alert("An error occurred while trying to create the contact.");
-      console.log(error);
     }
+
+    addContactApi(newContact)
+        .then(() => {
+          // Sincroniza el store con la API
+          syncContactList();
+          navigate("/contacts");
+    });
   }
 
 

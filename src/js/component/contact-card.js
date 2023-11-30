@@ -1,31 +1,20 @@
-import React from 'react'
-import { useNavigate } from 'react-router'
+import React from 'react';
+import { useNavigate } from 'react-router';
+import { deleteContactApi } from "../../client-API/contacts-api";
+import { useContact } from '../store/contactsStore';
 
-export default function ContactCard({contact, handleDelete}) {
+export default function ContactCard({contact}) {
   const navigate = useNavigate();
+  const { syncContactList } = useContact();
 
-  async function deleteContactFromApi(id) {
-    try {
-      const response = await fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`, {
-        method: "DELETE"
+  function handleDelete(id) {
+    deleteContactApi(id)
+      .then(() => {
+        syncContactList();
       });
-
-      if (response.status === 201) {
-        alert("Contact deleted successfully.");
-        handleDelete(id);
-      }
-      else {
-        alert("An error occurred while trying to delete contact.");
-      }
-
-    } catch (error) {
-        alert("An error occurred while trying to delete contact.");
-        console.log(error);
-    }
   }
 
   return (
-    <>
       <div className="d-flex flex-column flex-md-row align-items-center w-100 bg-white p-4 rounded shadow-sm mb-3">
 
         {/* Card Image */}
@@ -42,17 +31,15 @@ export default function ContactCard({contact, handleDelete}) {
 
         <div className="d-flex justify-self-end ms-auto">
           <button className="btn color-blue" onClick={() => navigate(`/contacts/edit/${contact.id}`)} ><i className="fa-solid fa-pen"></i></button>
-          <button className="btn color-blue" data-bs-toggle="modal" data-bs-target="#deleteModal"><i className="fa-solid fa-trash-can"></i></button>
+          <button className="btn color-blue" data-bs-toggle="modal" data-bs-target={`#deleteModal${contact.id}`}><i className="fa-solid fa-trash-can"></i></button>
         </div>
 
-      </div>
-
       {/* Modal */}
-      <div className="modal fade" id="deleteModal" tabIndex={-1} aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div className="modal fade" id={`deleteModal${contact.id}`} tabIndex={-1} aria-labelledby={`deleteModal${contact.id}Label`} aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="deleteModalLabel">Delete contact</h1>
+              <h1 className="modal-title fs-5" id={`deleteModal${contact.id}Label`}>Delete contact</h1>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -61,12 +48,12 @@ export default function ContactCard({contact, handleDelete}) {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" className="btn btn-primary" onClick={() => deleteContactFromApi(contact.id)} data-bs-dismiss="modal" >Delete</button>
+              <button type="button" className="btn btn-primary" onClick={() => handleDelete(contact.id)} data-bs-dismiss="modal" >Delete</button>
             </div>
           </div>
         </div>
       </div>
 
-    </>
+      </div>
   )
 }
